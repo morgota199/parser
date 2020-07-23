@@ -8,12 +8,12 @@ export class Reader {
     static itemsSubBlock(allLines: string[], exitData: ExitInterface[]) {
         let L_id: number = 1
 
-        for(const line in allLines){
-            if(allLines[line].indexOf("ITEM") !== -1) {
+        for(const L_lineIndex in allLines){
+            if(allLines[L_lineIndex].indexOf("ITEM") !== -1) {
                 exitData.push({
                     _id: L_id,
-                    item: +Reader.parameterFromTag(allLines[+line - 1]),
-                    item_num: +Reader.parameterFromTag(allLines[+line + 1]),
+                    item: +Reader.parameterFromTag(allLines[+L_lineIndex - 1]),
+                    item_num: +Reader.parameterFromTag(allLines[+L_lineIndex + 1]),
                     city: "",
                     republic: "",
                     index: 0,
@@ -31,11 +31,11 @@ export class Reader {
     static weightSubBlock(allLines: string[], exitData: ExitInterface[]) {
         let L_id = 0
 
-        for(const line in allLines) {
-            if(allLines[line].indexOf("KG") !== -1)
-                exitData[+L_id - 1].weight = +Reader.parameterFromTag(allLines[+line - 1])
+        for(const L_lineIndex in allLines) {
+            if(allLines[L_lineIndex].indexOf("KG") !== -1)
+                exitData[+L_id - 1].weight = +Reader.parameterFromTag(allLines[+L_lineIndex - 1])
 
-            if(allLines[line].indexOf("ITEM") !== -1)
+            if(allLines[L_lineIndex].indexOf("ITEM") !== -1)
                 L_id += 1
         }
 
@@ -45,17 +45,17 @@ export class Reader {
     static locationSubBlock(allLines: string[], exitData: ExitInterface[]) {
         let L_id = 0
 
-        for(const line in allLines) {
-            if(allLines[line].indexOf("KG") !== -1) {
-                exitData[+L_id - 1].index = +Reader.parameterFromTag(allLines[+line - 3])
+        for(const L_lineIndex in allLines) {
+            if(allLines[L_lineIndex].indexOf("KG") !== -1) {
+                exitData[+L_id - 1].index = +Reader.parameterFromTag(allLines[+L_lineIndex - 3])
                 exitData[+L_id - 1].republic = (
-                    Reader.parameterFromTag(allLines[+line - 5]) +
-                    " " + Reader.parameterFromTag(allLines[+line - 4])
+                    Reader.parameterFromTag(allLines[+L_lineIndex - 5]) +
+                    " " + Reader.parameterFromTag(allLines[+L_lineIndex - 4])
                 )
-                exitData[+L_id - 1].city = Reader.parameterFromTag(allLines[+line - 6])
+                exitData[+L_id - 1].city = Reader.parameterFromTag(allLines[+L_lineIndex - 6])
             }
 
-            if(allLines[line].indexOf("ITEM") !== -1)
+            if(allLines[L_lineIndex].indexOf("ITEM") !== -1)
                 L_id += 1
         }
 
@@ -65,16 +65,16 @@ export class Reader {
     static contactSubBlock(allLines: string[], exitData: ExitInterface[]) {
         let L_id = 0
 
-        for(const line in allLines) {
-            if(allLines[line].indexOf("KG") !== -1) {
+        for(const L_lineIndex in allLines) {
+            if(allLines[L_lineIndex].indexOf("KG") !== -1) {
                 exitData[+L_id - 1].contact = (
-                    Reader.parameterFromTag(allLines[+line + 2]) +
-                    " " + Reader.parameterFromTag(allLines[+line + 3]) +
-                    " " + Reader.parameterFromTag(allLines[+line + 4])
+                    Reader.parameterFromTag(allLines[+L_lineIndex + 2]) +
+                    " " + Reader.parameterFromTag(allLines[+L_lineIndex + 3]) +
+                    " " + Reader.parameterFromTag(allLines[+L_lineIndex + 4])
                 )
             }
 
-            if(allLines[line].indexOf("ITEM") !== -1)
+            if(allLines[L_lineIndex].indexOf("ITEM") !== -1)
                 L_id += 1
         }
 
@@ -84,12 +84,12 @@ export class Reader {
     static docSubBlock(allLines: string[], exitData: ExitInterface[]) {
         let L_id = 0
 
-        for(const line in allLines) {
-            if(allLines[line].indexOf("KG") !== -1) {
-                exitData[+L_id - 1].doc = Reader.parameterFromTag(allLines[+line - 2])
+        for(const L_lineIndex in allLines) {
+            if(allLines[L_lineIndex].indexOf("KG") !== -1) {
+                exitData[+L_id - 1].doc = Reader.parameterFromTag(allLines[+L_lineIndex - 2])
             }
 
-            if(allLines[line].indexOf("ITEM") !== -1)
+            if(allLines[L_lineIndex].indexOf("ITEM") !== -1)
                 L_id += 1
         }
 
@@ -97,13 +97,10 @@ export class Reader {
     }
 
     static parameterFromTag(line: string): string {
-        if(!line && line !== "CONTACT:") return ""
+        if(!line && line !== "CONTACT:")
+            return ""
 
         return line.split(">", 2)[1]
             .split("</", 2)[0]
-    }
-
-    static findById(id: number, exitData: ExitInterface[]) {
-        return exitData.filter(block => block._id === id)[0]
     }
 }
