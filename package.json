@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && PATH_IN=\"./data.txt\" PATH_OUT=\"./result.xls\" node index.js "
+    "start": "tsc && node index.js "
   },
   "author": "",
   "license": "ISC",
@@ -12,9 +12,7 @@
     "colors": "^1.4.0",
     "fs": "0.0.1-security",
     "json2csv": "^5.0.1",
-    "json2xls": "^0.1.2",
     "process": "^0.11.10",
-    "to-excel": "^2.2.2",
     "xlsx": "^0.16.4"
   },
   "devDependencies": {

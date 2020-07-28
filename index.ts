@@ -1,13 +1,13 @@
 import * as process from "process"
-import { readFile, writeFile } from "fs/promises"
+import * as fs from "fs"
 import { Parser as json2csv } from "json2csv"
 import { writeFile as write, utils } from "xlsx"
 import { Reader } from "./Reader"
 import { ExitInterface } from "./exitInterface"
 import "colors"
 
-const G_PATH_IN: string = process.env.PATH_IN!
-const G_PATH_OUT: string = process.env.PATH_OUT!
+const G_PATH_IN: string = process.argv[2]
+const G_PATH_OUT: string = process.argv[3]
 
 
 class Parser {
@@ -25,7 +25,7 @@ class Parser {
     }
 
     async start() {
-        const L_data: string = await readFile(this.path_in, "utf8")
+        const L_data: string = await fs.promises.readFile(this.path_in, "utf8")
         const L_lines: string[] = Reader.splitIntoLines(L_data)
 
         this.exitData = Reader.itemsSubBlock(L_lines, this.exitData)
@@ -51,7 +51,7 @@ class Parser {
         const L_parse = new json2csv()
         const L_csv = L_parse.parse(data)
 
-        await writeFile(this.path_out, L_csv)
+        await fs.promises.writeFile(this.path_out, L_csv)
 
         return console.log("===> Parse finally on file".green, this.path_out)
     }
